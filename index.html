@@ -84,60 +84,49 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
-      /* 1. Paksa browser tidak memberi jarak sama sekali */
-      @page {
-        size: auto;
-        margin: 0mm; 
+      /* 1. Sembunyikan elemen UI umum secara spesifik */
+      nav, .sidebar, button, .no-print, footer, .modal-footer {
+        display: none !important;
       }
     
-      /* 2. Reset total Body */
-      html, body {
-        margin: 0 !important;
-        padding: 0 !important;
+      /* 2. Reset Body agar putih bersih */
+      body {
         background: white !important;
-        -webkit-print-color-adjust: exact;
-      }
-    
-      /* 3. SEMBUNYIKAN SEMUA ELEMEN (Sangat Agresif) */
-      /* Kita sembunyikan semua, kecuali receipt-container */
-      body > *:not(.receipt-container) {
-        display: none !important;
-      }
-    
-      /* Target spesifik untuk tombol-tombol yang tadi muncul */
-      .no-print, button, nav, footer, .modal-footer, .flex.gap-4.mt-6 {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        height: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
       }
     
-      /* 4. PAKSA STRUK JADI POLOS & FULL KERTAS */
+      /* 3. Tampilkan Struk dengan posisi absolut ke pojok kiri atas */
+      /* Ini "jurus pamungkas" biar dia g ikut ngilang kalau parent-nya error */
       .receipt-container {
         display: block !important;
+        position: fixed !important; /* Paksa keluar dari aliran layout biasa */
+        top: 0 !important;
+        left: 0 !important;
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0mm !important; /* Padding kanan kiri jadi 0mm */
-        
-        /* Hapus Shadow, Border, & Rounded secara paksa */
-        box-shadow: none !important;
-        -webkit-box-shadow: none !important;
-        border: none !important;
-        outline: none !important;
-        border-radius: 0 !important;
+        max-width: 58mm !important; /* Sesuaikan lebar kertas lo */
+        height: auto !important;
         background: white !important;
+        
+        /* HAPUS SEMUA gangguan visual */
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 9999 !important;
       }
     
-      /* 5. Pastikan Logo mepet ke atas dan tengah */
-      .receipt-container img {
-        margin-top: 0 !important;
-        max-width: 45mm; /* Sesuaikan ukuran logo */
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
+      /* 4. Pastikan teks di dalamnya warna hitam pekat biar kebaca printer */
+      .receipt-container * {
+        color: black !important;
+        background: transparent !important;
+      }
+    
+      /* 5. Hilangkan margin kertas bawaan browser */
+      @page {
+        margin: 0;
+        size: auto;
       }
     }
   </style>
