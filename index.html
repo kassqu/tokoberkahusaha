@@ -1137,6 +1137,29 @@
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
       const [formData, setFormData] = useState({});
+      const [showAdminScanner, setShowAdminScanner] = useState(false);
+
+      useEffect(() => {
+        let scanner = null;
+        if (showAdminScanner) {
+          scanner = new Html5QrcodeScanner("admin-reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
+          scanner.render(
+            (decodedText) => {
+              scanner.clear();
+              setShowAdminScanner(false);
+              // Langsung masukin hasil scan ke inputan formData
+              setFormData(prev => ({...prev, barcode: decodedText}));
+              if (window.Swal) window.Swal.fire({ icon: 'success', title: 'Berhasil', text: `Barcode tercatat: ${decodedText}`, timer: 1500, showConfirmButton: false });
+            },
+            (err) => { /* abaikan error per frame */ }
+          );
+        }
+        return () => {
+          if (scanner) {
+            scanner.clear().catch(e => console.log(e));
+          }
+        };
+      }, [showAdminScanner]);
 
       const openModal = (p = null) => {
         setFormData(p ? {...p} : { id: `P${Date.now().toString().slice(-6)}`, name: '', barcode: '', category: categories[0]?.name || '', stock: 0, modal: 0, price: 0, diskon: 0, image: '' });
@@ -1308,8 +1331,15 @@
                   <div><label className="block text-xs font-bold text-slate-500 mb-1">Nama Produk</label><input required type="text" value={formData.name} onChange={e=>setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/></div>
                   
                   {/* BARCODE INPUT DITAMBAHKAN */}
-                  <div><label className="block text-xs font-bold text-slate-500 mb-1">Kode Barcode Fisik (Opsional)</label><input type="text" value={formData.barcode || ''} onChange={e=>setFormData({...formData, barcode: e.target.value})} placeholder="Tembak scanner fisik ke sini..." className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/></div>
-
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1">Kode Barcode Fisik (Opsional)</label>
+                    <div className="relative">
+                      <input type="text" value={formData.barcode || ''} onChange={e=>setFormData({...formData, barcode: e.target.value})} placeholder="Ketik / tembak / scan di sini..." className="w-full pl-3 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/>
+                      <button type="button" onClick={() => setShowAdminScanner(true)} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-100 rounded-lg transition-colors" title="Scan pakai kamera">
+                        <Icon name="qr_code_scanner" className="text-[20px]" />
+                      </button>
+                    </div>
+                  </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div><label className="block text-xs font-bold text-slate-500 mb-1">Kategori</label><select value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"><option value="">Pilih</option>{categories.map(c=><option key={c.id} value={c.name}>{c.name}</option>)}</select></div>
                     <div><label className="block text-xs font-bold text-slate-500 mb-1">Stok Fisik</label><input required type="number" value={formData.stock} onChange={e=>setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"/></div>
@@ -1385,6 +1415,20 @@
                   )}
                 </div>
               </div>
+            </div>
+          )}
+          {showAdminScanner && (
+            <div className="fixed inset-0 bg-slate-900/90 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+               <div className="bg-white p-6 rounded-[2rem] w-full max-w-sm relative animate-slide-up shadow-2xl">
+                  <button type="button" onClick={() => setShowAdminScanner(false)} className="absolute top-4 right-4 z-10 bg-slate-100 text-slate-600 rounded-full p-2 hover:bg-slate-200">
+                    <Icon name="close"/>
+                  </button>
+                  <div className="text-center mb-4 mt-2">
+                    <h3 className="font-bold text-xl text-slate-800">Scan Barcode Baru</h3>
+                    <p className="text-xs text-slate-500 mt-1">Arahkan kamera ke barcode produk</p>
+                  </div>
+                  <div id="admin-reader" className="w-full overflow-hidden rounded-xl bg-slate-100 border-2 border-dashed border-slate-300"></div>
+               </div>
             </div>
           )}
         </div>
