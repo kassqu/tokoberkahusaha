@@ -84,38 +84,44 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
-      /* 1. Atur Ukuran Kertas (Khusus Thermal 58mm) */
       @page {
-        size: 58mm auto; /* Lebar 58mm, tinggi otomatis mengikuti konten */
-        margin: 0;       /* Hapus margin bawaan browser (biar g kepotong) */
+        /* Atur ukuran kertas thermal (58mm) & hilangkan margin bawaan browser */
+        size: 58mm auto;
+        margin: 0; 
       }
     
       body {
+        background: white;
         margin: 0;
         padding: 0;
-        background: white;
       }
     
-      /* 2. Sembunyikan elemen dashboard (tombol, navbar, dll) */
-      .no-print, nav, button, .sidebar {
+      .no-print {
         display: none !important;
       }
     
-      /* 3. Paksa Container Struk Jadi Center & Pas di Kertas */
       .receipt-container {
-        width: 100%;       /* Full selebar kertas thermal */
-        max-width: 58mm;   /* Jangan lebih dari lebar kertas */
-        margin: 0 auto;    /* Posisikan di tengah */
-        padding: 5px;      /* Kasih napas dikit di pinggir */
-        box-shadow: none;
-        border: none;
+        width: 100% !important;
+        max-width: 58mm !important;
+        margin: 0 auto !important;
+        
+        /* 1. HAPUS SHADOW & BORDER ROUNDED */
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important; 
+        
+        /* 2. MEPEET KE ATAS (BIAR IRIT KERTAS) */
+        padding-top: 2mm !important; /* Jarak minimal banget dari atas */
+        padding-left: 2mm;
+        padding-right: 2mm;
+        padding-bottom: 5mm; /* Biar g langsung kepotong pas sobek */
       }
     
-      /* 4. Pastikan Teks & Gambar Pas */
+      /* Pastikan logo juga mepet ke atas */
       .receipt-container img {
-        max-width: 40mm;   /* Logo jangan kegedean */
-        display: block;
-        margin: 0 auto 10px;
+        margin-top: 0 !important;
+        margin-bottom: 5px !important;
+        max-width: 35mm;
       }
     }
   </style>
