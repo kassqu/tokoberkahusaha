@@ -391,10 +391,12 @@
         // Cari dari barcode atau ID (scanner fisik otomatis pencet Enter)
         const found = products.find(p => p.barcode === searchQuery || p.id === searchQuery || p.name.toLowerCase() === searchQuery.toLowerCase());
         if (found) {
-           addToCart(found);
+          playbeep(true); 
+          addToCart(found);
            setSearchQuery(''); // Bersihkan kolom setelah masuk keranjang
            // Optional: Bisa kasih suara beep disini kalau mau
         } else {
+          playbeep(false);
            showAlert({ icon: 'error', title: 'Tidak Ditemukan', text: `Barang dengan kode ${searchQuery} tidak terdaftar.` });
         }
       };
