@@ -84,19 +84,39 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
-      @page { size: 58mm auto; margin: 0; }
-      html, body { background-color: white !important; margin: 0 !important; padding: 0 !important; width: 58mm !important; }
-      body > * { display: none !important; }
-      #print-clone {
-        display: block !important; position: absolute !important; top: 0 !important; left: 0 !important;
-        width: 58mm !important; padding: 0 2mm 5mm 2mm !important; background: white !important;
-        color: black !important; font-family: 'Courier New', Courier, monospace !important;
+      /* 1. Atur Ukuran Kertas (Khusus Thermal 58mm) */
+      @page {
+        size: 58mm auto; /* Lebar 58mm, tinggi otomatis mengikuti konten */
+        margin: 0;       /* Hapus margin bawaan browser (biar g kepotong) */
       }
-      #print-clone .border-dashed { border-bottom: 1px dashed black !important; margin: 3mm 0 !important; }
-      #print-clone h2 { font-size: 14px !important; margin-bottom: 2px !important; text-align: center;}
-      #print-clone p, #print-clone td, #print-clone span { font-size: 10px !important; }
-      #print-clone table { width: 100% !important; }
-      #print-clone .no-print { display: none !important; }
+    
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+      }
+    
+      /* 2. Sembunyikan elemen dashboard (tombol, navbar, dll) */
+      .no-print, nav, button, .sidebar {
+        display: none !important;
+      }
+    
+      /* 3. Paksa Container Struk Jadi Center & Pas di Kertas */
+      .receipt-container {
+        width: 100%;       /* Full selebar kertas thermal */
+        max-width: 58mm;   /* Jangan lebih dari lebar kertas */
+        margin: 0 auto;    /* Posisikan di tengah */
+        padding: 5px;      /* Kasih napas dikit di pinggir */
+        box-shadow: none;
+        border: none;
+      }
+    
+      /* 4. Pastikan Teks & Gambar Pas */
+      .receipt-container img {
+        max-width: 40mm;   /* Logo jangan kegedean */
+        display: block;
+        margin: 0 auto 10px;
+      }
     }
   </style>
 </head>
