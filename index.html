@@ -84,52 +84,60 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
-      /* 1. Paksa browser buat g pake margin sama sekali */
+      /* 1. Paksa browser tidak memberi jarak sama sekali */
       @page {
-        size: auto; /* Biar ngikutin settingan printer di dialog */
+        size: auto;
         margin: 0mm; 
       }
     
+      /* 2. Reset total Body */
       html, body {
         margin: 0 !important;
         padding: 0 !important;
-        background-color: white !important;
-        height: auto !important;
+        background: white !important;
+        -webkit-print-color-adjust: exact;
       }
     
-      /* 2. Sembunyikan SEMUA elemen dashboard selain struk */
+      /* 3. SEMBUNYIKAN SEMUA ELEMEN (Sangat Agresif) */
+      /* Kita sembunyikan semua, kecuali receipt-container */
       body > *:not(.receipt-container) {
         display: none !important;
       }
     
-      /* 3. Setting Wadah Struk (Harus Kotak & Mepet) */
+      /* Target spesifik untuk tombol-tombol yang tadi muncul */
+      .no-print, button, nav, footer, .modal-footer, .flex.gap-4.mt-6 {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+    
+      /* 4. PAKSA STRUK JADI POLOS & FULL KERTAS */
       .receipt-container {
         display: block !important;
-        position: relative !important;
         width: 100% !important;
-        max-width: 100% !important; /* Gunakan 100% biar ngikut lebar kertas printer */
+        max-width: 100% !important;
         margin: 0 !important;
-        padding: 2mm !important; /* Jarak aman biar teks g mepet potong */
+        padding: 0mm !important; /* Padding kanan kiri jadi 0mm */
         
-        /* RESET TOTAL: Hapus bayangan, lengkungan, dan border */
+        /* Hapus Shadow, Border, & Rounded secara paksa */
         box-shadow: none !important;
+        -webkit-box-shadow: none !important;
         border: none !important;
+        outline: none !important;
         border-radius: 0 !important;
         background: white !important;
       }
     
-      /* 4. Biar irit kertas: logo jangan ada margin atas */
+      /* 5. Pastikan Logo mepet ke atas dan tengah */
       .receipt-container img {
         margin-top: 0 !important;
-        max-width: 40mm;
+        max-width: 45mm; /* Sesuaikan ukuran logo */
         display: block;
         margin-left: auto;
         margin-right: auto;
-      }
-    
-      /* 5. Cegah muncul halaman ke-2 (Sheet 1 of 2) */
-      footer, .no-print {
-        display: none !important;
       }
     }
   </style>
