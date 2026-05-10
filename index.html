@@ -390,13 +390,10 @@
         if (!searchQuery) return;
         // Cari dari barcode atau ID (scanner fisik otomatis pencet Enter)
         const found = products.find(p => p.barcode === searchQuery || p.id === searchQuery || p.name.toLowerCase() === searchQuery.toLowerCase());
-        if (found) {
-          playbeep(true); 
+        if (found) { 
           addToCart(found);
            setSearchQuery(''); // Bersihkan kolom setelah masuk keranjang
-           // Optional: Bisa kasih suara beep disini kalau mau
         } else {
-          playbeep(false);
            showAlert({ icon: 'error', title: 'Tidak Ditemukan', text: `Barang dengan kode ${searchQuery} tidak terdaftar.` });
         }
       };
@@ -413,9 +410,11 @@
               setShowScanner(false);
               const found = products.find(p => p.barcode === decodedText || p.id === decodedText);
               if (found) {
+                playBeep(true);
                 addToCart(found);
                 showAlert({ icon: 'success', title: 'Berhasil', text: `${found.name} ditambahkan!`, timer: 1500, showConfirmButton: false });
               } else {
+                playBeep(false);
                 showAlert({ icon: 'error', title: 'Tidak Ditemukan', text: `Barcode ${decodedText} tidak terdaftar di sistem!` });
               }
             },
