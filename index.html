@@ -84,44 +84,52 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
+      /* 1. Paksa browser buat g pake margin sama sekali */
       @page {
-        /* Atur ukuran kertas thermal (58mm) & hilangkan margin bawaan browser */
-        size: 58mm auto;
-        margin: 0; 
+        size: auto; /* Biar ngikutin settingan printer di dialog */
+        margin: 0mm; 
       }
     
-      body {
-        background: white;
-        margin: 0;
-        padding: 0;
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: white !important;
+        height: auto !important;
       }
     
-      .no-print {
+      /* 2. Sembunyikan SEMUA elemen dashboard selain struk */
+      body > *:not(.receipt-container) {
         display: none !important;
       }
     
+      /* 3. Setting Wadah Struk (Harus Kotak & Mepet) */
       .receipt-container {
+        display: block !important;
+        position: relative !important;
         width: 100% !important;
-        max-width: 58mm !important;
-        margin: 0 auto !important;
+        max-width: 100% !important; /* Gunakan 100% biar ngikut lebar kertas printer */
+        margin: 0 !important;
+        padding: 2mm !important; /* Jarak aman biar teks g mepet potong */
         
-        /* 1. HAPUS SHADOW & BORDER ROUNDED */
+        /* RESET TOTAL: Hapus bayangan, lengkungan, dan border */
         box-shadow: none !important;
         border: none !important;
-        border-radius: 0 !important; 
-        
-        /* 2. MEPEET KE ATAS (BIAR IRIT KERTAS) */
-        padding-top: 2mm !important; /* Jarak minimal banget dari atas */
-        padding-left: 2mm;
-        padding-right: 2mm;
-        padding-bottom: 5mm; /* Biar g langsung kepotong pas sobek */
+        border-radius: 0 !important;
+        background: white !important;
       }
     
-      /* Pastikan logo juga mepet ke atas */
+      /* 4. Biar irit kertas: logo jangan ada margin atas */
       .receipt-container img {
         margin-top: 0 !important;
-        margin-bottom: 5px !important;
-        max-width: 35mm;
+        max-width: 40mm;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    
+      /* 5. Cegah muncul halaman ke-2 (Sheet 1 of 2) */
+      footer, .no-print {
+        display: none !important;
       }
     }
   </style>
