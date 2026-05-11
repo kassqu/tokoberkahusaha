@@ -1,7 +1,7 @@
 {
-  "name": "Burjo Kondang",
+  "name": "Toko Berkah Usaha",
   "short_name": "KassQu",
-  "description": "Aplikasi Kasir Modern Toko Lek Heru",
+  "description": "Aplikasi Kasir Modern Toko Berkah Usaha",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#4f46e5",
