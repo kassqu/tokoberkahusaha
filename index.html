@@ -82,19 +82,40 @@
 
     /* CSS CETAK STRUK THERMAL */
     @media print {
-      nav, .sidebar, button, .no-print, footer, .modal-footer { display: none !important; }
-      body { background: white !important; margin: 0 !important; padding: 0 !important; }
-      .receipt-container {
-        display: block !important;
-        position: fixed !important; 
-        top: 0 !important; left: 0 !important;
-        width: 100% !important; max-width: 58mm !important; 
-        height: auto !important; background: white !important;
-        box-shadow: none !important; border: none !important; border-radius: 0 !important;
-        margin: 0 !important; padding: 0 !important; z-index: 9999 !important;
+      /* 1. Sembunyikan seluruh UI web, sisakan cuma kertas putih */
+      #root, .no-print { 
+        display: none !important; 
       }
-      .receipt-container * { color: black !important; background: transparent !important; }
-      @page { margin: 0; size: auto; }
+      
+      body { 
+        background: white !important; 
+        margin: 0 !important; 
+        padding: 0 !important; 
+      }
+
+      /* 2. Target ID struk hasil clone biar memenuhi layar */
+      #print-clone {
+        display: block !important;
+        position: static !important; /* static lebih aman dari fixed/absolute agar struk panjang tidak terpotong */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important; 
+        padding: 0 !important; /* Menghilangkan padding bawaan Tailwind */
+        border: none !important; /* Menghilangkan garis border bawaan Tailwind */
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+      }
+      
+      #print-clone * { 
+        color: black !important; 
+        background: transparent !important;
+      }
+
+      /* 3. Menghilangkan margin bawaan browser (header/footer default) */
+      @page { 
+        margin: 0; 
+      }
     }
   </style>
 </head>
