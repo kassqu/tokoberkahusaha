@@ -1306,7 +1306,15 @@
         <div className="space-y-6">
           <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div><h2 className="text-2xl font-bold text-slate-800">Manajemen Produk</h2></div>
-              
+              <div className="flex gap-2 shrink-0">
+                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-slate-100 text-slate-700 px-3 md:px-4 py-2 rounded-xl font-bold hover:bg-slate-200 flex items-center gap-2">
+                  <Icon name="category" className="text-[18px] md:text-sm"/> <span className="hidden md:inline">Kategori</span>
+                </button>
+                <button onClick={() => openModal()} className="bg-indigo-600 text-white px-3 md:px-4 py-2 rounded-xl font-bold hover:bg-indigo-700 shadow-md shadow-indigo-200 flex items-center gap-2">
+                  <Icon name="add" className="text-[18px] md:text-sm"/> <span className="hidden md:inline">Produk Baru</span>
+                </button>
+              </div>
+          </div>
               {/* SEARCH PRODUK */}
               <div className="px-4 md:px-6 mt-1">
                 <form onSubmit={handleSearchSubmit} className="relative max-w-3xl">
@@ -1320,17 +1328,7 @@
                   />
                 </form>
               </div>
-            
-              <div className="flex gap-2 shrink-0">
-                <button onClick={() => setIsCategoryModalOpen(true)} className="bg-slate-100 text-slate-700 px-3 md:px-4 py-2 rounded-xl font-bold hover:bg-slate-200 flex items-center gap-2">
-                  <Icon name="category" className="text-[18px] md:text-sm"/> <span className="hidden md:inline">Kategori</span>
-                </button>
-                <button onClick={() => openModal()} className="bg-indigo-600 text-white px-3 md:px-4 py-2 rounded-xl font-bold hover:bg-indigo-700 shadow-md shadow-indigo-200 flex items-center gap-2">
-                  <Icon name="add" className="text-[18px] md:text-sm"/> <span className="hidden md:inline">Produk Baru</span>
-                </button>
-              </div>
-          </div>
-
+          
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-auto overscroll-contain scroll-momentum hide-scrollbar">
               <table className="w-full text-left text-sm whitespace-nowrap min-w-[600px]">
                 <thead className="bg-slate-100 text-slate-500 uppercase text-xs font-bold">
