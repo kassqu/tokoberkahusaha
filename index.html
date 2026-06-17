@@ -133,115 +133,15 @@
     const showAlert = (options) => window.Swal ? window.Swal.fire(options) : alert(options.title || options.text);
 
     function App() {
-      const [userRole, setUserRole] = useState(null);
-      const [loading, setLoading] = useState(true);
-      const [products, setProducts] = useState([]);
-      const [categories, setCategories] = useState([]);
-      const [transactions, setTransactions] = useState([]);
-      const [balances, setBalances] = useState({ kembalian: 0 });
-      const [users, setUsers] = useState([]); 
-      
-      const [storeConfig, setStoreConfig] = useState({ 
-        name: 'Toko Berkah Usaha', 
-        address: 'Alamat Toko', 
-        phone: '0812345678', 
-        footer: 'Terima Kasih',
-        logo: 'logo.png'
-      });
-
-      const syncToGoogleSheets = async (action, data) => {
-        try {
-          await fetch(APP_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ action, data, timestamp: new Date().toISOString() })
-          });
-        } catch (error) { console.error("Sync Error:", error); }
-      };
-      
-      useEffect(() => {
-        const savedRole = localStorage.getItem('kassqu_role');
-        if (savedRole) setUserRole(savedRole);
-
-        const loadData = async () => {
-          try {
-            const res = await fetch(APP_SCRIPT_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify({ action: 'GET_INITIAL_DATA' })
-            });
-            const result = await res.json();
-            if (result.status === 'success') {
-              setProducts(result.data.products || []);
-              setCategories(result.data.categories || []);
-              setTransactions(result.data.transactions || []);
-              if (result.data.balances) setBalances(result.data.balances);
-              if (result.data.storeConfig) setStoreConfig(result.data.storeConfig);
-              if (result.data.users) setUsers(result.data.users); 
-            }
-          } catch (e) { console.error("Load Error", e); }
-          finally { setLoading(false); }
-        };
-        loadData();
-      }, []);
-
-      const handleLoginSuccess = (role) => {
-        setUserRole(role);
-        localStorage.setItem('kassqu_role', role);
-      };
-
-      const handleLogout = () => {
-        setUserRole(null);
-        localStorage.removeItem('kassqu_role');
-      };
-
-      if (loading) return (
-        <div className="full-immersive flex-col text-white overscroll-none select-none">
-          <div className="w-16 h-16 border-4 border-indigo-500 border-t-white rounded-full animate-spin mb-6"></div>
-          <div className="flex items-center gap-3 animate-fade-in">
-            <div className="bg-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/50">
-              <Icon name="point_of_sale" className="text-white text-3xl" />
-            </div>
-            <h1 className="text-4xl font-black tracking-widest drop-shadow-md">KASSQU</h1>
-          </div>
-          <p className="text-sm opacity-80 mt-4">Menyiapkan toko Anda...</p>
-        </div>
-      );
-      
-      if (!userRole) return <LoginScreen onLogin={handleLoginSuccess} storeConfig={storeConfig} users={users} />;
-
       return (
-        <div className="min-h-screen bg-slate-50">
-          {userRole === 'kasir' ? (
-            <KasirDashboard 
-              products={products} categories={categories} storeConfig={storeConfig}
-              transactions={transactions}
-              onLogout={handleLogout}
-              onTransactionSuccess={(trx) => {
-                setTransactions(prev => [trx, ...prev]);
-                syncToGoogleSheets('ADD_TRANSACTION', trx);
-                if (trx.method === 'Cash') {
-                  setBalances(prev => {
-                    const nb = { ...prev, kembalian: (prev.kembalian || 0) + trx.total };
-                    syncToGoogleSheets('UPDATE_BALANCES', nb);
-                    return nb;
-                  });
-                }
-              }}
-            />
-          ) : (
-            <AdminDashboard 
-              products={products} setProducts={setProducts} 
-              categories={categories} setCategories={setCategories}
-              transactions={transactions} storeConfig={storeConfig} setStoreConfig={setStoreConfig}
-              balances={balances} setBalances={setBalances}
-              users={users} setUsers={setUsers}
-              onLogout={handleLogout} syncToSheets={syncToGoogleSheets}
-            />
-          )}
+        <div style={{padding:'40px', color:'white'}}>
+          TEST BERHASIL
         </div>
       );
     }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
 
     // ==========================================
     // 1. LAYAR LOGIN
