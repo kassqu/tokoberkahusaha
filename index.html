@@ -400,7 +400,7 @@
             return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item);
           }
           const netPrice = product.price - (product.diskon || 0);
-          return [...prev, { ...product, price: netPrice, originalPrice: product.price, qty: 1, diskon: product.diskon || 0 }];
+          return [ ...prev, { ...product, price: netPrice, originalPrice: product.price, qty: 1, diskon: product.diskon || 0 }];
         });
       };
 
@@ -1188,7 +1188,7 @@
               scanner.clear();
               setShowAdminScanner(false);
               // Langsung masukin hasil scan ke inputan formData
-              setFormData(prev => ({...prev, barcode: decodedText}));
+              setFormData(prev => ({ ...prev, barcode: decodedText}));
               if (window.Swal) window.Swal.fire({ icon: 'success', title: 'Berhasil', text: `Barcode tercatat: ${decodedText}`, timer: 1500, showConfirmButton: false });
             },
             (err) => { /* abaikan error per frame */ }
@@ -1202,7 +1202,7 @@
       }, [showAdminScanner]);
 
       const openModal = (p = null) => {
-        setFormData(p ? {...p} : { id: `P${Date.now().toString().slice(-6)}`, name: '', barcode: '', category: categories[0]?.name || '', stock: 0, modal: 0, price: 0, diskon: 0, image: '' });
+        setFormData(p ? { ...p} : { id: `P${Date.now().toString().slice(-6)}`, name: '', barcode: '', category: categories[0]?.name || '', stock: 0, modal: 0, price: 0, diskon: 0, image: '' });
         setIsModalOpen(true);
       };
 
@@ -1246,7 +1246,7 @@
           setProducts(products.map(p => p.id === payload.id ? payload : p));
           syncToSheets('UPDATE_PRODUCT', payload);
         } else {
-          setProducts([...products, payload]);
+          setProducts([ ...products, payload]);
           syncToSheets('ADD_PRODUCT', payload);
         }
         setIsModalOpen(false); showAlert({ icon: 'success', title: 'Tersimpan!' });
@@ -1391,35 +1391,35 @@
               <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
                 <h3 className="text-xl font-bold mb-4">{formData.name ? 'Edit Produk' : 'Produk Baru'}</h3>
                 <form onSubmit={saveProduct} className="space-y-4">
-                  <div><label className="block text-xs font-bold text-slate-500 mb-1">Nama Produk</label><input required type="text" value={formData.name} onChange={e=>setFormData({...formData, name: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/></div>
+                  <div><label className="block text-xs font-bold text-slate-500 mb-1">Nama Produk</label><input required type="text" value={formData.name} onChange={e=>setFormData({ ...formData, name: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/></div>
                   
                   {/* BARCODE INPUT DITAMBAHKAN */}
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1">Kode Barcode Fisik (Opsional)</label>
                     <div className="relative">
-                      <input type="text" value={formData.barcode || ''} onChange={e=>setFormData({...formData, barcode: e.target.value})} placeholder="Ketik / tembak / scan di sini..." className="w-full pl-3 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/>
+                      <input type="text" value={formData.barcode || ''} onChange={e=>setFormData({ ...formData, barcode: e.target.value})} placeholder="Ketik / tembak / scan di sini..." className="w-full pl-3 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 font-medium"/>
                       <button type="button" onClick={() => setShowAdminScanner(true)} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-100 rounded-lg transition-colors" title="Scan pakai kamera">
                         <Icon name="qr_code_scanner" className="text-[20px]" />
                       </button>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div><label className="block text-xs font-bold text-slate-500 mb-1">Kategori</label><select value={formData.category} onChange={e=>setFormData({...formData, category: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"><option value="">Pilih</option>{categories.map(c=><option key={c.id} value={c.name}>{c.name}</option>)}</select></div>
-                    <div><label className="block text-xs font-bold text-slate-500 mb-1">Stok Fisik</label><input required type="number" value={formData.stock} onChange={e=>setFormData({...formData, stock: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"/></div>
+                    <div><label className="block text-xs font-bold text-slate-500 mb-1">Kategori</label><select value={formData.category} onChange={e=>setFormData({ ...formData, category: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"><option value="">Pilih</option>{categories.map(c=><option key={c.id} value={c.name}>{c.name}</option>)}</select></div>
+                    <div><label className="block text-xs font-bold text-slate-500 mb-1">Stok Fisik</label><input required type="number" value={formData.stock} onChange={e=>setFormData({ ...formData, stock: e.target.value})} className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl outline-none"/></div>
                   </div>
                   
                   <div className="grid grid-cols-3 gap-2">
                     <div>
                       <label className="block text-[10px] font-bold text-slate-500 mb-1">Harga Modal (Rp)</label>
-                      <input required type="text" value={formData.modal ? new Intl.NumberFormat('id-ID').format(formData.modal) : (formData.modal === 0 ? '0' : '')} onChange={e=>setFormData({...formData, modal: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-orange-50 border border-orange-200 rounded-xl outline-none text-orange-700 font-bold"/>
+                      <input required type="text" value={formData.modal ? new Intl.NumberFormat('id-ID').format(formData.modal) : (formData.modal === 0 ? '0' : '')} onChange={e=>setFormData({ ...formData, modal: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-orange-50 border border-orange-200 rounded-xl outline-none text-orange-700 font-bold"/>
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-slate-500 mb-1">Harga Jual (Rp)</label>
-                      <input required type="text" value={formData.price ? new Intl.NumberFormat('id-ID').format(formData.price) : (formData.price === 0 ? '0' : '')} onChange={e=>setFormData({...formData, price: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-indigo-50 border border-indigo-200 rounded-xl outline-none text-indigo-700 font-bold"/>
+                      <input required type="text" value={formData.price ? new Intl.NumberFormat('id-ID').format(formData.price) : (formData.price === 0 ? '0' : '')} onChange={e=>setFormData({ ...formData, price: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-indigo-50 border border-indigo-200 rounded-xl outline-none text-indigo-700 font-bold"/>
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold text-slate-500 mb-1">Diskon Promo (Rp)</label>
-                      <input type="text" value={formData.diskon ? new Intl.NumberFormat('id-ID').format(formData.diskon) : ''} onChange={e=>setFormData({...formData, diskon: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl outline-none text-pink-700 font-bold" placeholder="0"/>
+                      <input type="text" value={formData.diskon ? new Intl.NumberFormat('id-ID').format(formData.diskon) : ''} onChange={e=>setFormData({ ...formData, diskon: e.target.value.replace(/\D/g, '')})} className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl outline-none text-pink-700 font-bold" placeholder="0"/>
                     </div>
                   </div>
 
@@ -1429,7 +1429,7 @@
                       {formData.image ? (
                         <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 shrink-0">
                           <img src={formData.image} className="w-full h-full object-cover" alt="Preview" />
-                          <button type="button" onClick={() => setFormData({...formData, image: ''})} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"><Icon name="delete" className="text-sm"/></button>
+                          <button type="button" onClick={() => setFormData({ ...formData, image: ''})} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"><Icon name="delete" className="text-sm"/></button>
                         </div>
                       ) : (
                         <div className="w-16 h-16 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0 text-slate-400">
@@ -1616,11 +1616,11 @@
                 <h3 className="text-xl font-bold mb-6">Detail Pegawai</h3>
                 <form onSubmit={handleSave} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1">Kode (admin/kasir)</label><input required value={formData.kode} onChange={e=>setFormData({...formData, kode: e.target.value.toLowerCase()})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none" /></div>
-                    <div><label className="block text-xs font-bold text-slate-400 mb-1">Nama Staff</label><input required value={formData.nama} onChange={e=>setFormData({...formData, nama: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none" /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1">Kode (admin/kasir)</label><input required value={formData.kode} onChange={e=>setFormData({ ...formData, kode: e.target.value.toLowerCase()})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none" /></div>
+                    <div><label className="block text-xs font-bold text-slate-400 mb-1">Nama Staff</label><input required value={formData.nama} onChange={e=>setFormData({ ...formData, nama: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none" /></div>
                   </div>
-                  <div><label className="block text-xs font-bold text-slate-400 mb-1">PIN Rahasia</label><input required value={formData.pin} onChange={e=>setFormData({...formData, pin: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none font-mono" placeholder="4 Digit" /></div>
-                  <div><label className="block text-xs font-bold text-slate-400 mb-1">Status</label><select value={formData.status} onChange={e=>setFormData({...formData, status: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none"><option value="aktif">Aktif</option><option value="nonaktif">Nonaktif</option></select></div>
+                  <div><label className="block text-xs font-bold text-slate-400 mb-1">PIN Rahasia</label><input required value={formData.pin} onChange={e=>setFormData({ ...formData, pin: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none font-mono" placeholder="4 Digit" /></div>
+                  <div><label className="block text-xs font-bold text-slate-400 mb-1">Status</label><select value={formData.status} onChange={e=>setFormData({ ...formData, status: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none"><option value="aktif">Aktif</option><option value="nonaktif">Nonaktif</option></select></div>
                   <button type="submit" className="w-full bg-indigo-600 text-white p-4 rounded-2xl font-black text-lg shadow-xl shadow-indigo-100">SIMPAN DATA</button>
                   <button type="button" onClick={()=>setIsModalOpen(false)} className="w-full text-slate-400 mt-2 text-sm">Batal</button>
                 </form>
