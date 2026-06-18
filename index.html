@@ -1253,10 +1253,16 @@
       };
 
       const delProd = (id) => {
+        const prosesHapus = () => {
+          setProducts(prev => prev.filter(p => String(p.id) !== String(id))); 
+          syncToSheets('DELETE_PRODUCT', { id });
+          showAlert({ icon: 'success', title: 'Produk Terhapus!', timer: 1500, showConfirmButton: false });
+        };
+
         if (window.Swal) {
           window.Swal.fire({
             title: 'Hapus Produk?',
-            text: "Data tidak bisa dikembalikan!",
+            text: "Yakin mau hapus? Data tidak bisa dikembalikan!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
@@ -1264,11 +1270,13 @@
             cancelButtonText: 'Batal'
           }).then((result) => {
             if (result.isConfirmed) {
-              setProducts(products.filter(p=>p.id!==id)); 
-              syncToSheets('DELETE_PRODUCT', {id});
-              showAlert({ icon: 'success', title: 'Terhapus!' });
+              prosesHapus();
             }
           });
+        } else {
+          if (window.confirm("Hapus produk ini? Data tidak bisa dikembalikan!")) {
+            prosesHapus();
+          }
         }
       };
 
